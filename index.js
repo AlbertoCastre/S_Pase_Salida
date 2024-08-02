@@ -5,7 +5,7 @@ const app = express();
 
 // Configuración de CORS
 const corsOptions = {
-  origin: 'http://localhost:3333', // Reemplaza con la URL de tu cliente React
+  origin: 'http://localhost:5173', // Reemplaza con la URL de tu cliente React
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Permitir cookies y encabezados autorizados
 };

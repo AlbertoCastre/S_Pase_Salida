@@ -7,6 +7,7 @@ dotenv.config();
 const { connection } = require('../config/config.db');
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Servicio para obtener todos los productos
 const getProductos = (request, response) => {
@@ -22,12 +23,15 @@ const getProductos = (request, response) => {
 
 // Servicio para agregar o editar un producto
 const postProducto = (request, response) => {
-    const { action, id_producto, responsable, id_departamento, hora_entrada, cantidad, color, modelo, marca, serie, observaciones, id_motivo_salida, id_tipo_salida, fecha_estimacion_reparacion } = request.body;
+    // Imprimir los datos recibidos
+    console.log("Datos recibidos en el backend:", request.body);
+
+    const { action, id_producto, responsable_producto, id_departamento, cantidad_producto, color_producto, modelo_producto, marca_producto, serie_producto, observaciones_producto, id_motivo_salida, id_tipo_salida, fecha_estimada_reparacion_producto, observaciones_salida_producto } = request.body;
 
     if (action === 'insert') {
         connection.query(
-            'INSERT INTO tbl_productos (responsable, id_departamento, hora_entrada, cantidad, color, modelo, marca, serie, observaciones, id_motivo_salida, id_tipo_salida, fecha_estimacion_reparacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [responsable, id_departamento, hora_entrada, cantidad, color, modelo, marca, serie, observaciones, id_motivo_salida, id_tipo_salida, fecha_estimacion_reparacion],
+            'INSERT INTO tbl_productos (responsable_producto, id_departamento, cantidad_producto, color_producto, modelo_producto, marca_producto, serie_producto, observaciones_producto, id_motivo_salida, id_tipo_salida, fecha_estimada_reparacion_producto, observaciones_salida_producto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [responsable_producto, id_departamento, cantidad_producto, color_producto, modelo_producto, marca_producto, serie_producto, observaciones_producto, id_motivo_salida, id_tipo_salida, fecha_estimada_reparacion_producto || null, observaciones_salida_producto || null],
             (error, results) => {
                 if (error) {
                     console.error('Error al agregar producto:', error);
@@ -39,8 +43,8 @@ const postProducto = (request, response) => {
         );
     } else if (action === 'update') {
         connection.query(
-            'UPDATE tbl_productos SET responsable=?, id_departamento=?, hora_entrada=?, cantidad=?, color=?, modelo=?, marca=?, serie=?, observaciones=?, id_motivo_salida=?, id_tipo_salida=?, fecha_estimacion_reparacion=? WHERE id_producto=?',
-            [responsable, id_departamento, hora_entrada, cantidad, color, modelo, marca, serie, observaciones, id_motivo_salida, id_tipo_salida, fecha_estimacion_reparacion, id_producto],
+            'UPDATE tbl_productos SET responsable_producto=?, id_departamento=?, cantidad_producto=?, color_producto=?, modelo_producto=?, marca_producto=?, serie_producto=?, observaciones_producto=?, id_motivo_salida=?, id_tipo_salida=?, fecha_estimada_reparacion_producto=?, observaciones_salida_producto=? WHERE id_producto=?',
+            [responsable_producto, id_departamento, cantidad_producto, color_producto, modelo_producto, marca_producto, serie_producto, observaciones_producto, id_motivo_salida, id_tipo_salida, fecha_estimada_reparacion_producto || null, observaciones_salida_producto || null, id_producto],
             (error, results) => {
                 if (error) {
                     console.error('Error al actualizar producto:', error);
